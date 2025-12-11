@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pokedx
+      POSTGRES_USER: pokedx_user
+      POSTGRES_PASSWORD: supersecret
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    image: aceofglass14/pokedx-backend:latest
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://pokedx_user:supersecret@db:5432/pokedx
+    ports:
+      - "8000:8000"
+
+volumes:
+  db_data:
